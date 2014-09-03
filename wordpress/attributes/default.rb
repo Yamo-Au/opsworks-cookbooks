@@ -15,3 +15,12 @@ node[:deploy].each do |application, deploy|
   unless valid_deploy_chef_providers.include?(node[:deploy][application][:chef_provider])
     raise "Invalid chef_provider '#{node[:deploy][application][:chef_provider]}' for app '#{application}'. Valid providers: #{valid_deploy_chef_providers.join(', ')}."
   end
+  default[:deploy][application][:keep_releases] = node[:deploy][application][:keep_releases] ? node[:deploy][application][:keep_releases] : node[:opsworks][:deploy_keep_releases]
+  default[:deploy][application][:current_path] = "#{node[:deploy][application][:deploy_to]}/current"
+  default[:deploy][application][:document_root] = ''
+  default[:deploy][application][:ignore_bundler_groups] = node[:opsworks][:rails][:ignore_bundler_groups]
+  if deploy[:document_root]
+    default[:deploy][application][:absolute_document_root] = "#{default[:deploy][application][:current_path]}/#{deploy[:document_root]}/"
+  else
+    default[:deploy][application][:absolute_document_root] = "#{default[:deploy][application][:current_path]}/"
+  end
