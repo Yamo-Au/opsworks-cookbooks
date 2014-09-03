@@ -3,7 +3,7 @@
 # Recipe:: wordpress
 #
 
-include_recipe 'php'
+include_recipe 'deploy'
 
 node[:deploy].each do |application, deploy|
 
